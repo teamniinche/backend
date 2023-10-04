@@ -4,7 +4,6 @@ require('./config/db')
 const chantersRoutes=require('./mongoose/routes/chantiersRoutes')
 const membresRoutes=require('./mongoose/routes/membresRoutes')
 const rubriquesRoutes=require('./mongoose/routes/rubriquesRoutes')
-// const fs = require('fs');
 // const rubriques = require('./lateam.json');
 // const membres=require('../JSON/membres.json');
 // const chantierss = require('../JSON/chantierss.json');
