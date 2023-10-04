@@ -1,5 +1,5 @@
 const express = require('express');
-require('dotenv').config({path:'../config/.env'});
+require('dotenv').config({path:'./.env'});
 require('./config/db')
 const chantersRoutes=require('./mongoose/routes/chantiersRoutes')
 const membresRoutes=require('./mongoose/routes/membresRoutes')
