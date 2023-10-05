@@ -14,7 +14,7 @@ const rubriquesRoutes=require('./mongoose/routes/rubriquesRoutes')
 const multer = require('multer');
 const path = require('path');
 const bodyParser = require('body-parser');
-const cors=require('cors')
+// const cors=require('cors')
 
 // const images=require('./images')
 // WwTB1JW5B8Luv5aD   cluster password
