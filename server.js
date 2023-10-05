@@ -1,6 +1,28 @@
 const express = require('express');
 require('dotenv').config({path:'./.env'});
 require('./config/db')
+
+// Set middleware of CORS 
+app.use((req, res, next) => {
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://www.teamniintcheft.onrender.com"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS,CONNECT,TRACE"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Authorization, X-Content-Type-Options, Accept, X-Requested-With, Origin, Access-Control-Request-Method, Access-Control-Request-Headers"
+  );
+  res.setHeader("Access-Control-Allow-Credentials", true);
+  res.setHeader("Access-Control-Allow-Private-Network", true);
+  //  Firefox caps this at 24 hours (86400 seconds). Chromium (starting in v76) caps at 2 hours (7200 seconds). The default value is 5 seconds.
+  res.setHeader("Access-Control-Max-Age", 7200);
+
+  next();
+});
 const chantersRoutes=require('./mongoose/routes/chantiersRoutes')
 const membresRoutes=require('./mongoose/routes/membresRoutes')
 const rubriquesRoutes=require('./mongoose/routes/rubriquesRoutes')
@@ -42,7 +64,7 @@ app.use('/api/rubriques',rubriquesRoutes)
 //   console.log('Serveur en écoute sur www.teamniintcheft.onrender.com au port'+process.env.PORT);
 // });
 
-app.listen(process.env.PORT,()=>{console.log('Serveur démarré au port '+process.env.PORT)})
+app.listen(process.env.PORT,()=>{console.log('Serveur démarré au port '+ process.env.PORT)})
 
 // // Routes for getting all the items
 // // app.get('/api/chantiers',(requete,response)=>{response.send(chantierss)});
