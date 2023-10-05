@@ -3,7 +3,7 @@ const chantiersController=require('../controllers/chantiersController')
 const cors = require('cors')
  
 var corsOptions = {
-  origin: 'https://tnserver.onrender.com',
+  origin: 'https://tnserver.onrender.com/api/chantiers/allchantiers',
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 
