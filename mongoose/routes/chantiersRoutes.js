@@ -3,7 +3,7 @@ const chantiersController=require('../controllers/chantiersController')
 const cors = require('cors')
  
 var corsOptions = {
-  origin: 'https://www.teamniintcheft.onrender.com',
+  origin: 'http://www.teamniintcheft.onrender.com',
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 
