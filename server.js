@@ -41,7 +41,7 @@ const app=express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
-app.use('/api/chantiers',chantersRoutes)
+app.use('https://tnserver.onrender.com/api/chantiers',chantersRoutes)
 app.use('/api/membres',membresRoutes)
 app.use('/api/rubriques',rubriquesRoutes)
 // function upDateFile(url,file){
