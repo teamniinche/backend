@@ -25,11 +25,11 @@ const bodyParser = require('body-parser');
 const app=express();
 // Set middleware of CORS 
 app.use((req, res, next) => {
-  res.setHeader(
+  req.setHeader(
     "Access-Control-Allow-Origin",
     "https://www.teamniintcheft.onrender.com"
   );
-  res.setHeader(
+  req.setHeader(
     "Access-Control-Allow-Methods",
     "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS,CONNECT,TRACE"
   );
