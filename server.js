@@ -14,7 +14,7 @@ const rubriquesRoutes=require('./mongoose/routes/rubriquesRoutes')
 const multer = require('multer');
 const path = require('path');
 const bodyParser = require('body-parser');
-// const cors=require('cors')
+const cors=require('cors')
 
 // const images=require('./images')
 // WwTB1JW5B8Luv5aD   cluster password
@@ -25,19 +25,19 @@ const bodyParser = require('body-parser');
 // const PORT=8000;
 const app=express();
 // Set middleware of CORS 
-// app.use(cors())
-// app.use((req, res, next) => {
-//   res.header("Access-Control-Allow-Origin","https://teamniintcheft.onrender.com");
-//   res.header("Access-Control-Allow-Methods","GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS,CONNECT,TRACE");
-//   res.header("Access-Control-Allow-Headers","Content-Type, Authorization, X-Content-Type-Options, Accept, X-Requested-With, Origin, Access-Control-Request-Method, Access-Control-Request-Headers"
-//   );
-//   res.header("Access-Control-Allow-Credentials", true);
-//   res.header("Access-Control-Allow-Private-Network", true);
-//   //  Firefox caps this at 24 hours (86400 seconds). Chromium (starting in v76) caps at 2 hours (7200 seconds). The default value is 5 seconds.
-//   res.header("Access-Control-Max-Age", 7200);
+app.use(cors())
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin","https://teamniintcheft.onrender.com");
+  res.header("Access-Control-Allow-Methods","GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS,CONNECT,TRACE");
+  res.header("Access-Control-Allow-Headers","Content-Type, Authorization, X-Content-Type-Options, Accept, X-Requested-With, Origin, Access-Control-Request-Method, Access-Control-Request-Headers"
+  );
+  res.header("Access-Control-Allow-Credentials", true);
+  res.header("Access-Control-Allow-Private-Network", true);
+  //  Firefox caps this at 24 hours (86400 seconds). Chromium (starting in v76) caps at 2 hours (7200 seconds). The default value is 5 seconds.
+  res.header("Access-Control-Max-Age", 7200);
 
-//   next();
-// });
+  next();
+});
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());

@@ -1,13 +1,13 @@
 const router=require('express').Router();
 const chantiersController=require('../controllers/chantiersController')
-const cors = require('cors')
+// const cors = require('cors')
  
-var corsOptions = {
-  origin: 'https://tnserver.onrender.com/',
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-}
+// var corsOptions = {
+//   origin: 'https://tnserver.onrender.com/',
+//   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+// }
 
-router.get('/allchantiers',cors(corsOptions),chantiersController.getAll)//Obtenir tous les chantiers // Ok
+router.get('/allchantiers',chantiersController.getAll)//Obtenir tous les chantiers // Ok
 router.get('/allchantiers/:termOfResearch',chantiersController.getByTerm)//Rechercher un chantier à la barre de recherche OK
 router.get('/:name',chantiersController.getOne) //Obetenir UN chantier par som nom enregistré// Ok
 router.get('/getNewChantier/:id',chantiersController.getAndEditNewChantier) //Obtenir le nouveau chantier en cours// ok
