@@ -25,9 +25,9 @@ const app=express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
-app.use('/api/chantiers',chantersRoutes)
-app.use('/api/membres',membresRoutes)
-app.use('/api/rubriques',rubriquesRoutes)
+app.use('https://www.teamniintcheft.onrender.com/api/chantiers',chantersRoutes)
+app.use('https://www.teamniintcheft.onrender.com/api/membres',membresRoutes)
+app.use('https://www.teamniintcheft.onrender.com/api/rubriques',rubriquesRoutes)
 // function upDateFile(url,file){
 //     let fileString=JSON.stringify(file)
 //     fs.writeFileSync(url,fileString,(error)=>{
