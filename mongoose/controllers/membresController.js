@@ -36,8 +36,9 @@ module.exports.add = async (req, res) => {
     const { pseudo,passWord,departementDOrigine,firstName,lastName,sexe,telephoneNumber,statu,profil,alias,qualification,formation1,formation2,email,dateAnniversaire,tngroupe,apropos,confidentiel } = req.body
     const galeriePrive={imgPublic:'',imgPrive: '',imgPublic1:'',imgPublic2:''}
     const chef="non"
-    const id=membres.length
     try {
+        const Membres = await membres.find().select('-passWord')
+        const id=Membres.length
         const newMembre = await membres.create(
             { 
                 id:id,
