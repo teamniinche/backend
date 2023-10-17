@@ -1,3 +1,4 @@
+const router=require('express').Router();
 const cloudinary = require('cloudinary').v2;
 require('../../config/cloudinary_config.js');
 const apiSecret = cloudinary.config().api_secret;
