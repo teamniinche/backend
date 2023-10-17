@@ -44,7 +44,7 @@ app.use(express.json());
 app.use('/api/chantiers',chantersRoutes)
 app.use('/api/membres',membresRoutes)
 app.use('/api/rubriques',rubriquesRoutes)
-app.use('/api/mycloudinary',myCoudinaryRoutes)
+app.use('/api/mycloudinary',myCloudinaryRoutes)
 // function upDateFile(url,file){
 //     let fileString=JSON.stringify(file)
 //     fs.writeFileSync(url,fileString,(error)=>{
