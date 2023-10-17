@@ -50,4 +50,6 @@ router.get('/signuploadform', function (req, res, next) {
 //       apikey: apiKey
 //     })
 //   })
+
+module.exports=router;
   
