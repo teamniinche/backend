@@ -12,7 +12,7 @@ const signuploadform = () => {
   const signature = cloudinary.utils.api_sign_request({
     timestamp: timestamp,
     eager: 'c_pad,h_300,w_400|c_crop,h_200,w_260',
-    folder: 'signed_upload_demo_form'}, apiSecret);
+    folder: 'signed_upload_demo_form/membres'}, apiSecret);
 
   return { timestamp, signature }
 }
