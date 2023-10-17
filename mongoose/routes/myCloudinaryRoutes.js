@@ -7,12 +7,13 @@ const apiKey = cloudinary.config().api_key;
 
 // Server-side function used to sign an upload with a couple of
 // example eager transformations included in the request.
-const signuploadform = () => {
+const signuploadform = (filename) => {
   const timestamp = Math.round((new Date).getTime()/1000);
 
   const signature = cloudinary.utils.api_sign_request({
     timestamp: timestamp,
     eager: 'c_pad,h_200,w_200|c_crop,h_200,w_200',
+    public_id:filename,
     folder: 'signed_upload_demo_form/membres'}, apiSecret);
 
   return { timestamp, signature }
@@ -31,8 +32,8 @@ const signuploadform = () => {
 //   }
 
 // using this API should require authentication
-router.get('/signuploadform', function (req, res, next) {
-  const sig = signuploadform()
+router.get('/signuploadform/:filename', function (req, res, next) {
+  const sig = signuploadform(req.params.filename)
   res.json({
     signature: sig.signature,
     timestamp: sig.timestamp,
