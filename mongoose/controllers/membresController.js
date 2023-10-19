@@ -79,6 +79,7 @@ module.exports.maj = async (req, res) => {
         Téléphone,
         Formation1,
         Formation2,
+        Qualification,
         Equipe
         }=req.body
     try {
@@ -93,6 +94,7 @@ module.exports.maj = async (req, res) => {
                 telephoneNumber:Téléphone,
                 formation1:Formation1,
                 formation2:Formation2,
+                qualification:Qualification,
                 tngroupe:Equipe
             },
             {new:true, upsert:true, setDefaultsOnInsert:true,validateModifiedOnly:true}
