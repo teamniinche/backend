@@ -38,8 +38,24 @@ router.get('/signuploadform/:filename', function (req, res, next) {
     signature: sig.signature,
     timestamp: sig.timestamp,
     cloudname: cloudName,
-    apikey: apiKey
+    apikey: apiKey,
+    apiSecret:apiSecret
   })
+})
+
+router.post('/delete/:filename', function (req, res, next) {
+    const sig = signuploadform(req.params.filename)
+    cloudinary.uploader.destroy(
+        req.params.filename, 
+        {
+            signature: sig.signature,
+            apiSecret:apiSecret
+        },
+        function(result) { 
+        
+        send(result) 
+
+    });
 })
 
 // // using this API should require authentication
