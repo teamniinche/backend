@@ -18,7 +18,17 @@ const signuploadform = (filename) => {
 
   return { timestamp, signature }
 }
-
+const signuploadAlbum = (filename) => {
+    const timestamp = Math.round((new Date).getTime()/1000);
+  
+    const signature = cloudinary.utils.api_sign_request({
+      timestamp: timestamp,
+      eager: 'c_pad,h_200,w_200|c_crop,h_200,w_200',
+      public_id:filename,
+      folder: 'signed_upload_demo_form/galerie'}, apiSecret);
+  
+    return { timestamp, signature }
+  }
 // // Server-side function used to sign an Upload Widget upload.
 // const signuploadwidget = () => {
 //     const timestamp = Math.round((new Date).getTime()/1000);
@@ -42,9 +52,34 @@ router.get('/signuploadform/:filename', function (req, res, next) {
     apiSecret:apiSecret
   })
 })
+router.get('/signuploadAlbum/:filename', function (req, res, next) {
+    const sig = signuploadAlbum(req.params.filename)
+    res.json({
+      signature: sig.signature,
+      timestamp: sig.timestamp,
+      cloudname: cloudName,
+      apikey: apiKey,
+      apiSecret:apiSecret
+    })
+  })
 
 router.post('/delete/:filename', function (req, res, next) {
     const sig = signuploadform(req.params.filename)
+    cloudinary.uploader.destroy(
+        req.params.filename, 
+        {
+            signature: sig.signature,
+            apiSecret:apiSecret
+        },
+        function(result) { 
+        
+        send(result) 
+
+    });
+})
+
+router.post('/delete/album/:filename', function (req, res, next) {
+    const sig = signuploadAlbum(req.params.filename)
     cloudinary.uploader.destroy(
         req.params.filename, 
         {
