@@ -5,6 +5,7 @@ require('./config/db')
 const chantersRoutes=require('./mongoose/routes/chantiersRoutes')
 const membresRoutes=require('./mongoose/routes/membresRoutes')
 const rubriquesRoutes=require('./mongoose/routes/rubriquesRoutes')
+const imagesRoutes=require('./mongoose/routes/imagesRoutes')
 const myCloudinaryRoutes=require('./mongoose/routes/myCloudinaryRoutes')
 // const rubriques = require('./lateam.json');
 // const membres=require('../JSON/membres.json');
@@ -45,6 +46,7 @@ app.use(express.json());
 app.use('/api/chantiers',chantersRoutes)
 app.use('/api/membres',membresRoutes)
 app.use('/api/rubriques',rubriquesRoutes)
+app.use('/api/images',imagesRoutes)
 app.use('/api/mycloudinary',myCloudinaryRoutes)
 // function upDateFile(url,file){
 //     let fileString=JSON.stringify(file)
