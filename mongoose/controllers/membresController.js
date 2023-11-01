@@ -193,7 +193,7 @@ module.exports.getOne = async (req, res) => {
     const pseudo=req.params.pseudo
     // if(!ObjectID.isValid(id)){return res.status(404).send('ID [ '+ id + ' ] unknown !')}
     try {
-        const unblockedMembres=membres.filter(membre=>membre.statu==="v")
+        // const unblockedMembres=membres.filter(membre=>membre.statu==="v")
         const membre = await membres.findOne({pseudo:pseudo}) //test
         res.status(201).send(membre)
     } catch (err) {
@@ -204,8 +204,8 @@ module.exports.getOne = async (req, res) => {
 module.exports.login = async (req, res) => {
     const {pseudo,passWord}=req.body
     try {
-        const unblockedMembres=membres.filter(membre=>membre.statu==="v")
-        const membre = await unblockedMembres.findOne({pseudo:pseudo}) //test
+        // const unblockedMembres=membres.filter(membre=>membre.statu==="v")
+        const membre = await membres.findOne({pseudo:pseudo}) //test
         if(!membre){res.status(203).send({erreur:"Nom d'utilisateur inconnu ❗"})}
         else{
             const isValid=bcrypt.compare(passWord,membre.passWord)
