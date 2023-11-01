@@ -25,7 +25,7 @@ module.exports.add = async (req, res) => {
     try {
         const newPhoto = await images.create(req.body)
         res.status(201).json({ status:'image '+ newPhoto.name + ' added' })
-    } catch (err) {
+    }  catch (err) {
         res.status(404).json({ erreur: err })
     }
 }
