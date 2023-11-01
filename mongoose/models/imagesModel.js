@@ -4,10 +4,7 @@ const imagesSchema = new mongoose.Schema(
     {
         numeroEnvoi: { type: Number },
         ordreEnvoi: { type: Number },
-        imgName:{
-            type:String,
-            default:'galerie_' + numeroEnvoi + '_' + ordreEnvoi + '.jpg'
-        },
+        imgName:{type:String },
         album: { type: String }
     }
 );
