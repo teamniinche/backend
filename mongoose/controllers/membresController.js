@@ -1,10 +1,15 @@
 const membres = require('../models/membresModel')
+const nodeMailer=require('nodemailer')
 const ObjectID=require('mongoose').Types.ObjectId
 
+function getRandomForEmailConfirm(min, max) {
+    return Math.random() * (max - min) + min;
+  }
 
 module.exports.getAll = async (req, res) => {
     try {
         const Membres = await membres.find().select('-passWord')
+        
         res.status(200).send(Membres)
     } catch (err) {
         res.status(404).json({ erreur: 'err' })
@@ -17,7 +22,8 @@ module.exports.getByTerm = async (req, res) => {
     try {
         const Membres = await membres.find().select('-passWord')
         const recherches = Membres.filter(membre=>(membre.firstName+membre.lastName+membre.pseudo+membre.alias+membre.sexe).toUpperCase().includes(termOfResearch))
-        res.status(200).send(recherches)
+        const unblockedMembres=recherches.filter(membre=>membre.statu==="v")
+        res.status(200).send(unblockedMembres)
     } catch (err) {
         res.status(404).json({ erreur: 'err' })
     }   
@@ -33,16 +39,20 @@ module.exports.getFiltred = async (req, res) => {
 }
 
 module.exports.add = async (req, res) => {
+    const bcrypt=require('bcrypt')
+    const odiem=bcrypt.genSaltSync(10)
     const { pseudo,passWord,departementDOrigine,firstName,lastName,sexe,telephoneNumber,statu,profil,alias,qualification,formation1,formation2,email,dateAnniversaire,tngroupe,apropos,confidentiel } = req.body
     const galeriePrive={imgPublic:'',imgPrive: '',imgPublic1:'',imgPublic2:''}
     const chef="non"
     const id=membres.length
+    const deggat= await bcrypt.hash(passWord,odiem)
+    // const codeInMail=getRandomForEmailConfirm(9001,10000)
     try {
         const newMembre = await membres.create(
             { 
                 id:id,
                 pseudo:pseudo,
-                passWord:passWord,
+                passWord:deggat,
                 departementDOrigine:departementDOrigine,
                 firstName:firstName,
                 lastName:lastName,
@@ -60,12 +70,25 @@ module.exports.add = async (req, res) => {
                 tngroupe:tngroupe,
                 apropos:apropos,
                 confidentiel:confidentiel,
-                chef:chef
+                chef:chef,
+                IValidation:false,
+                // EValidation:{code:codeInMail,confirmation:false},
+
              })
+        // confirmEmail(email)
         res.status(201).json({ newMembreId: newMembre._id })
     } catch (err) {
         res.status(404).json({ erreur: err })
     }
+}
+
+module.exports.validMembre = async (req, res) => {
+            const pseudo=req.params.pseudo
+            await membres.updateOne(
+                {pseudo:pseudo},
+                {IValidation:true},
+                {new:true, upsert:true, setDefaultsOnInsert:true,validateModifiedOnly:true}
+            )
 }
 
 module.exports.maj = async (req, res) => {
@@ -170,8 +193,29 @@ module.exports.getOne = async (req, res) => {
     const pseudo=req.params.pseudo
     // if(!ObjectID.isValid(id)){return res.status(404).send('ID [ '+ id + ' ] unknown !')}
     try {
-        const membre = await membres.findOne({pseudo:pseudo})
+        const unblockedMembres=membres.filter(membre=>membre.statu==="v")
+        const membre = await unblockedMembres.findOne({pseudo:pseudo}) //test
         res.status(201).send(membre)
+    } catch (err) {
+        res.status(404).json({ erreur: err })
+    }
+}
+
+module.exports.login = async (req, res) => {
+    const {pseudo,passWord}=req.body
+    try {
+        const unblockedMembres=membres.filter(membre=>membre.statu==="v")
+        const membre = await unblockedMembres.findOne({pseudo:pseudo}) //test
+        if(!membre){res.status(203).send({erreur:"Nom d'utilisateur inconnu ❗"})}
+        else{
+            const bcrypt=require('bcrypt')
+            const isValid=bcrypt.compare(passWord,membre.passWord)
+            if(!isValid){
+                res.status(202).send({erreur:'Mot de passe éroné ❗'})
+            }else{
+                res.status(201).send(membre)
+            }
+        }
     } catch (err) {
         res.status(404).json({ erreur: err })
     }
@@ -188,3 +232,33 @@ module.exports.searchIfMembre= async (req, res)=>{
       }
       res.status(200).send(bool)
       };
+
+const confirmEmail=async (email)=>{
+    const transporteur=nodeMailer.createTransport(
+        {
+            service: 'gmail',
+            auth: {
+              user: 'ndourm9@gmail.com',
+              pass: '1m7A5m9A',
+            },   
+        }
+    );
+
+    const mailOptions={
+            from:'ndourm9@gmail.com',
+            to:email,
+            subject:'Test nodemailer',
+            text:'My first NODEMAILER mail from to ndayfatou@gmail.com'
+        }
+
+    transporteur.sendMail(mailOptions,
+            (error,info)=>{
+                if(error){
+                    console.loge=('Mail sending succed❤🥰')
+                }else{
+                    console.log({'Mail sending failed!':error})
+                }
+            }
+    )
+
+}

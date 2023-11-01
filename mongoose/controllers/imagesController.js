@@ -6,7 +6,8 @@ module.exports.getAll = async (req, res) => {
 
     try {
         const photos = await images.find().select('')
-        res.status(200).json(photos)
+        const albas = await albums.find().select('')
+        res.status(200).json({photos:photos,albums:albas})
     } catch (err) {
         res.status(404).json({ erreur: err })
     }
@@ -14,8 +15,8 @@ module.exports.getAll = async (req, res) => {
 module.exports.getAlbs = async (req, res) => {
 
     try {
-        const alba = await albums.find().select('')
-        res.status(200).json(alba)
+        const albas = await albums.find().select('')
+        res.status(200).json(albas)
     } catch (err) {
         res.status(404).json({ erreur: err })
     }
@@ -30,7 +31,7 @@ module.exports.add = async (req, res) => {
 }
 module.exports.addAlb = async (req, res) => {
     try {
-        const newAlbum = await albums.create(req.body)
+        const newAlbum = await albums.create({name:req.body.name})
         res.status(201).json({ status:'New Album is added' })
     } catch (err) {
         res.status(404).json({ erreur: err })

@@ -28,6 +28,7 @@ const membresSchema = new mongoose.Schema(
         statu: { type: String },
         profil: { type: String },
         chef: { type: String },
+        IValidation:{type:Boolean}
     }
 )
 const membresModel = mongoose.model('membre', membresSchema);

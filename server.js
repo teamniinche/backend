@@ -61,8 +61,8 @@ app.use('/api/mycloudinary',myCloudinaryRoutes)
 // app.listen(process.env.PORT, 'www.teamniintcheft.onrender.com', () => {
 //   console.log('Serveur en écoute sur www.teamniintcheft.onrender.com au port'+process.env.PORT);
 // });
-
-app.listen(process.env.PORT,()=>{console.log('Serveur démarré au port '+ process.env.PORT)})
+let port=process.env.PORT||8000
+app.listen(port,()=>{console.log('Serveur démarré au port '+ port)})
 
 // // Routes for getting all the items
 // // app.get('/api/chantiers',(requete,response)=>{response.send(chantierss)});
