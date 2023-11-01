@@ -16,6 +16,6 @@ router.put('/admin/:pseudo',membresController.majProps)
 // Confirmation & Validation
 // router.get('/code/:pseudo',membresController.getCode)
 // router.put('/confirmCode/:pseudo',membresController.confirm)
-router.put('/validMembre/:pseudo',membresController.validMembre)
+// router.put('/validMembre/:pseudo',membresController.validMembre)
 
 module.exports=router;

@@ -1,10 +1,11 @@
 const membres = require('../models/membresModel')
 const nodeMailer=require('nodemailer')
+const bcrypt=require('bcrypt')
 const ObjectID=require('mongoose').Types.ObjectId
 
-function getRandomForEmailConfirm(min, max) {
-    return Math.random() * (max - min) + min;
-  }
+// function getRandomForEmailConfirm(min, max) {
+//     return Math.random() * (max - min) + min;
+//   }
 
 module.exports.getAll = async (req, res) => {
     try {
@@ -39,7 +40,6 @@ module.exports.getFiltred = async (req, res) => {
 }
 
 module.exports.add = async (req, res) => {
-    const bcrypt=require('bcrypt')
     const odiem=bcrypt.genSaltSync(10)
     const { pseudo,passWord,departementDOrigine,firstName,lastName,sexe,telephoneNumber,statu,profil,alias,qualification,formation1,formation2,email,dateAnniversaire,tngroupe,apropos,confidentiel } = req.body
     const galeriePrive={imgPublic:'',imgPrive: '',imgPublic1:'',imgPublic2:''}
@@ -82,14 +82,14 @@ module.exports.add = async (req, res) => {
     }
 }
 
-module.exports.validMembre = async (req, res) => {
-            const pseudo=req.params.pseudo
-            await membres.updateOne(
-                {pseudo:pseudo},
-                {IValidation:true},
-                {new:true, upsert:true, setDefaultsOnInsert:true,validateModifiedOnly:true}
-            )
-}
+// module.exports.validMembre = async (req, res) => {
+//             const pseudo=req.params.pseudo
+//             await membres.updateOne(
+//                 {pseudo:pseudo},
+//                 {IValidation:true},
+//                 {new:true, upsert:true, setDefaultsOnInsert:true,validateModifiedOnly:true}
+//             )
+// }
 
 module.exports.maj = async (req, res) => {
     const membrePseudo = req.params.pseudo;
@@ -193,8 +193,8 @@ module.exports.getOne = async (req, res) => {
     const pseudo=req.params.pseudo
     // if(!ObjectID.isValid(id)){return res.status(404).send('ID [ '+ id + ' ] unknown !')}
     try {
-        const unblockedMembres=membres.filter(membre=>membre.statu==="v")
-        const membre = await unblockedMembres.findOne({pseudo:pseudo}) //test
+        // const unblockedMembres=membres.filter(membre=>membre.statu==="v")
+        const membre = await membres.findOne({pseudo:pseudo}) //test
         res.status(201).send(membre)
     } catch (err) {
         res.status(404).json({ erreur: err })
@@ -204,11 +204,10 @@ module.exports.getOne = async (req, res) => {
 module.exports.login = async (req, res) => {
     const {pseudo,passWord}=req.body
     try {
-        const unblockedMembres=membres.filter(membre=>membre.statu==="v")
+        // const unblockedMembres=membres.filter(membre=>membre.statu==="v")
         const membre = await unblockedMembres.findOne({pseudo:pseudo}) //test
         if(!membre){res.status(203).send({erreur:"Nom d'utilisateur inconnu ❗"})}
         else{
-            const bcrypt=require('bcrypt')
             const isValid=bcrypt.compare(passWord,membre.passWord)
             if(!isValid){
                 res.status(202).send({erreur:'Mot de passe éroné ❗'})
@@ -233,32 +232,32 @@ module.exports.searchIfMembre= async (req, res)=>{
       res.status(200).send(bool)
       };
 
-const confirmEmail=async (email)=>{
-    const transporteur=nodeMailer.createTransport(
-        {
-            service: 'gmail',
-            auth: {
-              user: 'ndourm9@gmail.com',
-              pass: '1m7A5m9A',
-            },   
-        }
-    );
+// const confirmEmail=async (email)=>{
+//     const transporteur=nodeMailer.createTransport(
+//         {
+//             service: 'gmail',
+//             auth: {
+//               user: 'ndourm9@gmail.com',
+//               pass: '1m7A5m9A',
+//             },   
+//         }
+//     );
 
-    const mailOptions={
-            from:'ndourm9@gmail.com',
-            to:email,
-            subject:'Test nodemailer',
-            text:'My first NODEMAILER mail from to ndayfatou@gmail.com'
-        }
+//     const mailOptions={
+//             from:'ndourm9@gmail.com',
+//             to:email,
+//             subject:'Test nodemailer',
+//             text:'My first NODEMAILER mail from to ndayfatou@gmail.com'
+//         }
 
-    transporteur.sendMail(mailOptions,
-            (error,info)=>{
-                if(error){
-                    console.loge=('Mail sending succed❤🥰')
-                }else{
-                    console.log({'Mail sending failed!':error})
-                }
-            }
-    )
+//     transporteur.sendMail(mailOptions,
+//             (error,info)=>{
+//                 if(error){
+//                     console.loge=('Mail sending succed❤🥰')
+//                 }else{
+//                     console.log({'Mail sending failed!':error})
+//                 }
+//             }
+//     )
 
-}
+// }
