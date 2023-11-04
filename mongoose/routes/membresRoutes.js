@@ -11,6 +11,7 @@ router.post('/newMembre',membresController.add)
 router.delete(':id',membresController.delete)
 // Updating membre
 router.put('/:pseudo',membresController.maj)
+router.put('/user/:pseudo',membresController.changePassWord)
 router.put('/galerie/:pseudo/:sProp',membresController.majGalerie)
 router.put('/admin/:pseudo',membresController.majProps)
 router.put('/userRs/:pseudo',membresController.majRs)
