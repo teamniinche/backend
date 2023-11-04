@@ -13,6 +13,12 @@ const membresSchema = new mongoose.Schema(
         dateAnniversaire: { type: String },
         telephoneNumber: { type: String,required:true,maxlength: 50, minlength: 1 },
         email: { type: String },
+        rS:{
+            userX:{type:String},
+            userFa:{type:String},
+            userIn:{type:String},
+            userLi:{type:String},
+        },
         formation1: { type: String },
         formation2: { type: String },
         tngroupe: { type: String },

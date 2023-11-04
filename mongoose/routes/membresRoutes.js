@@ -13,6 +13,7 @@ router.delete(':id',membresController.delete)
 router.put('/:pseudo',membresController.maj)
 router.put('/galerie/:pseudo/:sProp',membresController.majGalerie)
 router.put('/admin/:pseudo',membresController.majProps)
+router.put('/userRs/:pseudo',membresController.majRs)
 // Confirmation & Validation
 // router.get('/code/:pseudo',membresController.getCode)git add 
 router.put('/validMembre/:pseudo',membresController.validMembre)

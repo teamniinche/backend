@@ -147,6 +147,23 @@ module.exports.majProps=async (req,res)=>{
     }
 }
 
+module.exports.majRs=async (req,res)=>{
+    // const {statu,profil,chef}=req.body
+    const membrePseudo = req.params.pseudo;
+    try {
+        await membres.updateOne(
+            {pseudo:membrePseudo},//{_id:id},
+            {
+                rS:req.body
+            },
+            {new:true, upsert:true, setDefaultsOnInsert:true,validateModifiedOnly:true}
+        )
+        res.status(200).send({'retour':'rs bien mis à jour !'})
+    } catch (err) {
+        return res.status(400).send(err)
+    }
+}
+
  module.exports.majGalerie=async (req,res)=>{
     const membrePseudo = req.params.pseudo;
     const membreSProp = req.params.sProp;
@@ -208,8 +225,8 @@ module.exports.login = async (req, res) => {
         const membre = await membres.findOne({pseudo:pseudo}) //test
         if(!membre){res.status(203).send({erreur:"Nom d'utilisateur inconnu ❗"})}
         else{
-            const isValid=bcrypt.compare(passWord,membre.passWord)
-            if(!isValid){
+            // const isValid=bcrypt.compare(passWord,membre.passWord)
+            if(passWord!==membre.passWord){
                 res.status(202).send({erreur:'Mot de passe éroné ❗'})
             }else{
                 res.status(201).send(membre)
