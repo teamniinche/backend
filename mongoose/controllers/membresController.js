@@ -133,7 +133,7 @@ module.exports.changePassWord = async (req, res) => {
     const {passWord}=req.body
     const odiem=10
     const deggat= await new Promise((resolve,reject)=>{
-        bcrypt.hash(passWord,odiem,function(err,hast){
+        bcrypt.hash(passWord,odiem,function(err,hash){
         if(err) reject(err)
         resolve(hash)
         });
