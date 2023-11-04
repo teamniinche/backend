@@ -148,13 +148,16 @@ module.exports.majProps=async (req,res)=>{
 }
 
 module.exports.majRs=async (req,res)=>{
-    // const {statu,profil,chef}=req.body
+    const {X,Fa,In,Li}=req.body
     const membrePseudo = req.params.pseudo;
     try {
         await membres.updateOne(
             {pseudo:membrePseudo},//{_id:id},
             {
-                rS:req.body
+                'rS.userX':X,
+                'rS.userFa':Fa,
+                'rS.userIn':In,
+                'rS.userLi':Li
             },
             {new:true, upsert:true, setDefaultsOnInsert:true,validateModifiedOnly:true}
         )
