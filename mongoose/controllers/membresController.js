@@ -131,8 +131,8 @@ module.exports.maj = async (req, res) => {
 module.exports.changePassWord = async (req, res) => {
     const membrePseudo = req.params.pseudo;
     const {passWord}=req.body
-    const odiem=10
     const deggat= await new Promise((resolve,reject)=>{
+        const odiem=bcrypt.genSaltSync(10)
         bcrypt.hash(passWord,odiem,function(err,hash){
         if(err) reject(err)
         resolve(hash)
