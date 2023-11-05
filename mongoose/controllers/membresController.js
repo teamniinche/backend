@@ -136,7 +136,13 @@ module.exports.maj = async (req, res) => {
 module.exports.changePassWord = async (req, res) => {
     const membrePseudo = req.params.pseudo;
     const {Ancien,Nouveau,Confirmation}=req.body
-
+    const isValid=await new Promise((resolve,reject)=>{
+            const membre=membres.filter(membre=>membre.pseudo===membrePseudo)
+            bcrypt.compare(Ancien,membre[0].passWord,function(err,isValid){
+            if(err) reject(err)
+            resolve(isValid)
+            });
+        })
     const deggat= await new Promise((resolve,reject)=>{
         const odiem=bcrypt.genSaltSync(10)
         bcrypt.hash(Nouveau,odiem,function(err,hash){
@@ -145,12 +151,15 @@ module.exports.changePassWord = async (req, res) => {
         });
     })
     try {
+        if(!isValid){
+            return res.status(400).send({'retour':'Mot de passe non reconnu ❕'})}
+        else{
         
             await membres.updateOne( {pseudo:membrePseudo},{passWord:deggat},
                 {new:true, upsert:true, setDefaultsOnInsert:true,validateModifiedOnly:true}
                 )
                 res.status(200).send({'retour':'Mot de passe changé avec succés !'})
-        
+        }
     } catch (err) {
         return res.status(400).send(err)
     }
