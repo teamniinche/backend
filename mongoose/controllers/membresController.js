@@ -44,20 +44,20 @@ module.exports.add = async (req, res) => {
     const galeriePrive={imgPublic:'',imgPrive: '',imgPublic1:'',imgPublic2:''}
     const chef="non"
     const id=membres.length
-    const deggat= await new Promise((resolve,reject)=>{
-        const odiem=bcrypt.genSaltSync(10)
-        bcrypt.hash(passWord,odiem,function(err,hash){
-        if(err) reject(err)
-        resolve(hash)
-        });
-    })
+    //const deggat= await new Promise((resolve,reject)=>{
+        //const odiem=bcrypt.genSaltSync(10)
+        //bcrypt.hash(passWord,odiem,function(err,hash){
+        //if(err) reject(err)
+        //resolve(hash)
+        //});
+    //})
     // const codeInMail=getRandomForEmailConfirm(9001,10000)
     try {
         const newMembre = await membres.create(
             { 
                 id:id,
                 pseudo:pseudo,
-                passWord:deggat,
+                passWord:passWord,
                 departementDOrigine:departementDOrigine,
                 firstName:firstName,
                 lastName:lastName,
