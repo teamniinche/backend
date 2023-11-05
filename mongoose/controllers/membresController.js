@@ -46,8 +46,8 @@ module.exports.add = async (req, res) => {
     
     // const codeInMail=getRandomForEmailConfirm(9001,10000)
     try {
-        //const odiem=bcrypt.genSaltSync(10)
-        bcrypt.hash(passWord,10, async function(err,hash){
+        const odiem=bcrypt.genSaltSync(10)
+        bcrypt.hash(passWord,odiem, async function(err,hash){
         if(err){ res.status(404).json({ erreur: err })}else{
         const Membres = await membres.find().select('-passWord')
         const id=Membres.length
