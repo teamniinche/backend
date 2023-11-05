@@ -4,7 +4,7 @@ const membresSchema = new mongoose.Schema(
     {
         id:{type:Number},
         pseudo: { type: String,required:true,maxlength: 50, minlength: 1 },
-        passWord: { type: String,required:true,maxlength: 50, minlength: 1 },
+        passWord: { type: String,required:true,maxlength: 100, minlength: 1 },
         firstName: { type: String,required:true,maxlength: 50, minlength: 1 },
         lastName: { type: String,required:true,maxlength: 50, minlength: 1 },
         alias: { type: String },
