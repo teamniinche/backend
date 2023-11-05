@@ -47,8 +47,8 @@ module.exports.add = async (req, res) => {
     // const codeInMail=getRandomForEmailConfirm(9001,10000)
     try {
     const deggat= await new Promise((resolve,reject)=>{
-        const odiem=bcrypt.genSaltSync(10)
-        bcrypt.hash(passWord,odiem,function(err,hash){
+        //const odiem=bcrypt.genSaltSync(10)
+        bcrypt.hash(passWord,10,function(err,hash){
         if(err) reject(err)
         resolve(hash)
         });
