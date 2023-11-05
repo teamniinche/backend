@@ -48,7 +48,7 @@ module.exports.add = async (req, res) => {
     try {
         //const odiem=bcrypt.genSaltSync(10)
         bcrypt.hash(passWord,10, async function(err,hash){
-        if(err){ reject(err)}else{
+        if(err){ res.status(404).json({ erreur: err })}else{
         const Membres = await membres.find().select('-passWord')
         const id=Membres.length
         const newMembre = await membres.create(
@@ -81,7 +81,7 @@ module.exports.add = async (req, res) => {
              })
         // confirmEmail(email)
         res.status(201).json({ newMembreId: newMembre._id })
-        })
+        }})
     } catch (err) {
         res.status(404).json({ erreur: err })
     }
