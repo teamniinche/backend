@@ -40,12 +40,17 @@ module.exports.getFiltred = async (req, res) => {
 }
 
 module.exports.add = async (req, res) => {
-    const odiem=bcrypt.genSaltSync(10)
     const { pseudo,passWord,departementDOrigine,firstName,lastName,sexe,telephoneNumber,statu,profil,alias,qualification,formation1,formation2,email,dateAnniversaire,tngroupe,apropos,confidentiel } = req.body
     const galeriePrive={imgPublic:'',imgPrive: '',imgPublic1:'',imgPublic2:''}
     const chef="non"
     const id=membres.length
-    const deggat= await bcrypt.hash(passWord,odiem)
+    const deggat= await new Promise((resolve,reject)=>{
+        const odiem=bcrypt.genSaltSync(10)
+        bcrypt.hash(passWord,odiem,function(err,hash){
+        if(err) reject(err)
+        resolve(hash)
+        });
+    })
     // const codeInMail=getRandomForEmailConfirm(9001,10000)
     try {
         const newMembre = await membres.create(
@@ -130,14 +135,33 @@ module.exports.maj = async (req, res) => {
 
 module.exports.changePassWord = async (req, res) => {
     const membrePseudo = req.params.pseudo;
-    const {passWord}=req.body
-    const odiem=bcrypt.genSaltSync(10)
-    const deggat=bcrypt.hash(passWord,odiem)
+    const {Ancien,Nouveau,Confirmation}=req.body
+    const isValid=await new Promise((resolve,reject)=>{
+        const membre=membres.filter(membre=>membre.pseudo===membrePseudo)
+        if(membre.length===0){reject(err)}
+        else{
+            bcrypt.compare(Ancien,membre[0].passWord,function(err,isValid){
+            if(err) reject(err)
+            resolve(isValid)
+            });
+        }
+    })
+    const deggat= await new Promise((resolve,reject)=>{
+        const odiem=bcrypt.genSaltSync(10)
+        bcrypt.hash(Nouveau,odiem,function(err,hash){
+        if(err) reject(err)
+        resolve(hash)
+        });
+    })
     try {
-        await membres.updateOne( {pseudo:membrePseudo},{passWord:deggat},
-            {new:true, upsert:true, setDefaultsOnInsert:true,validateModifiedOnly:true}
-            )
-            res.status(200).send({'retour':'Mot de passe changé avec succés !'})
+        if(!isValid){
+            return res.status(400).send({'retour':'Mot de passe non reconnu ❕'})}
+        else{ 
+            await membres.updateOne( {pseudo:membrePseudo},{passWord:deggat},
+                {new:true, upsert:true, setDefaultsOnInsert:true,validateModifiedOnly:true}
+                )
+                res.status(200).send({'retour':'Mot de passe changé avec succés !'})
+        }
     } catch (err) {
         return res.status(400).send(err)
     }
@@ -243,7 +267,13 @@ module.exports.login = async (req, res) => {
         const membre = await membres.findOne({pseudo:pseudo}) //test
         if(!membre){res.status(203).send({erreur:"Nom d'utilisateur inconnu ❗"})}
         else{
-            const isValid=bcrypt.compare(passWord,membre.passWord)
+            // const isValid= await bcrypt.compare(passWord,membre.passWord)
+            const isValid=await new Promise((resolve,reject)=>{
+                bcrypt.compare(passWord,membre.passWord,function(err,isValid){
+                if(err) reject(err)
+                resolve(isValid)
+                });
+            })
             if(!isValid){
                 res.status(202).send({erreur:'Mot de passe éroné ❗'})
             }else{
