@@ -6,6 +6,7 @@ router.get('/allmembres/pseudos/:term',membresController.searchIfMembre)
 router.get('/allmembres/:termOfResearch',membresController.getByTerm)
 router.get('/:pseudo',membresController.getOne)
 router.post('/login',membresController.login)
+router.post('/membre/isSame',membresController.isSame)
 router.post('/newMembre',membresController.add)
 // Deletion
 router.delete(':id',membresController.delete)
