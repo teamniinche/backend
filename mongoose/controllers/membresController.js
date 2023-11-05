@@ -145,24 +145,12 @@ module.exports.changePassWord = async (req, res) => {
         });
     })
     try {
-        const isValid=await new Promise((resolve,reject)=>{
-        const membre= membres.filter(membre=>membre.pseudo===membrePseudo)
-        if(membre.length===0){reject(err)}
-        else{
-            bcrypt.compare(Ancien,membre[0].passWord,function(err,isValid){
-            if(err) reject(err)
-            resolve(isValid)
-            });
-        }
-    })
-        if(!isValid){
-            return res.status(400).send({'retour':'Mot de passe non reconnu ❕'})}
-        else{ 
+        
             await membres.updateOne( {pseudo:membrePseudo},{passWord:deggat},
                 {new:true, upsert:true, setDefaultsOnInsert:true,validateModifiedOnly:true}
                 )
                 res.status(200).send({'retour':'Mot de passe changé avec succés !'})
-        }
+        
     } catch (err) {
         return res.status(400).send(err)
     }
