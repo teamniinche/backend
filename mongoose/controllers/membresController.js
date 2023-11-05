@@ -137,7 +137,7 @@ module.exports.changePassWord = async (req, res) => {
     const membrePseudo = req.params.pseudo;
     const {Ancien,Nouveau,Confirmation}=req.body
     const isValid=await new Promise((resolve,reject)=>{
-        const membre=membres.filter(membre=>membre.pseudo===membrePseudo)
+        const membre= await membres.filter(membre=>membre.pseudo===membrePseudo)
         if(membre.length===0){reject(err)}
         else{
             bcrypt.compare(Ancien,membre[0].passWord,function(err,isValid){
