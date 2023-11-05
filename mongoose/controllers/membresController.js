@@ -46,20 +46,16 @@ module.exports.add = async (req, res) => {
     
     // const codeInMail=getRandomForEmailConfirm(9001,10000)
     try {
-    const deggat= await new Promise((resolve,reject)=>{
         //const odiem=bcrypt.genSaltSync(10)
         bcrypt.hash(passWord,10,function(err,hash){
-        if(err) reject(err)
-        resolve(hash)
-        });
-    })
+        if(err){ reject(err)}else{
         const Membres = await membres.find().select('-passWord')
         const id=Membres.length
         const newMembre = await membres.create(
             { 
                 id:id,
                 pseudo:pseudo,
-                passWord:deggat,
+                passWord:hash,
                 departementDOrigine:departementDOrigine,
                 firstName:firstName,
                 lastName:lastName,
@@ -85,6 +81,7 @@ module.exports.add = async (req, res) => {
              })
         // confirmEmail(email)
         res.status(201).json({ newMembreId: newMembre._id })
+        })
     } catch (err) {
         res.status(404).json({ erreur: err })
     }
