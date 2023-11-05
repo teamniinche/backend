@@ -267,7 +267,6 @@ module.exports.login = async (req, res) => {
         const membre = await membres.findOne({pseudo:pseudo}) //test
         if(!membre){res.status(203).send({erreur:"Nom d'utilisateur inconnu ❗"})}
         else{
-            // const isValid= await bcrypt.compare(passWord,membre.passWord)
             const isValid=await new Promise((resolve,reject)=>{
                 bcrypt.compare(passWord,membre.passWord,function(err,isValid){
                 if(err) reject(err)
