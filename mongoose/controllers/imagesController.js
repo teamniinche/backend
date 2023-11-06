@@ -6,8 +6,8 @@ module.exports.getAll = async (req, res) => {
 
     try {
         const photos = await images.find().select('')
-        const albas = await albums.find().select('')
-        res.status(200).json({photos:photos,albums:albas})
+        //const albas = await albums.find().select('')
+        res.status(200).json(photos)
     } catch (err) {
         res.status(404).json({ erreur: err })
     }
