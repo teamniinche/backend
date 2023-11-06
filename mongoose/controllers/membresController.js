@@ -46,9 +46,6 @@ module.exports.add = async (req, res) => {
     
     // const codeInMail=getRandomForEmailConfirm(9001,10000)
     try {
-        const Membres = await membres.find({email:email})
-        .exec()
-        .then(membres=>{ if(membes.length>=1){alert('Email dèja existant ❗')}else{
         const odiem=bcrypt.genSaltSync(10)
         bcrypt.hash(passWord,odiem, async function(err,hash){
         if(err){alert(err.message)}else{
@@ -85,7 +82,6 @@ module.exports.add = async (req, res) => {
         // confirmEmail(email)
         res.status(201).json({ newMembreId: newMembre._id })
         }})
-    } } )
     } catch (err) {
         res.status(404).json({ erreur: err })
     }
