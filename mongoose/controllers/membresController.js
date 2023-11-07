@@ -43,21 +43,19 @@ module.exports.add = async (req, res) => {
     const { pseudo,passWord,departementDOrigine,firstName,lastName,sexe,telephoneNumber,statu,profil,alias,qualification,formation1,formation2,email,dateAnniversaire,tngroupe,apropos,confidentiel } = req.body
     const galeriePrive={imgPublic:'',imgPrive: '',imgPublic1:'',imgPublic2:''}
     const chef="non"
-    const id=membres.length
-    const deggat= await new Promise((resolve,reject)=>{
-        const odiem=bcrypt.genSaltSync(10)
-        bcrypt.hash(passWord,odiem,function(err,hash){
-        if(err) reject(err)
-        resolve(hash)
-        });
-    })
+    
     // const codeInMail=getRandomForEmailConfirm(9001,10000)
     try {
+        const odiem=bcrypt.genSaltSync(10)
+        bcrypt.hash(passWord,odiem, async function(err,hash){
+        if(err){alert(err.message)}else{
+        const Membres = await membres.find().select('-passWord')
+        const id=Membres.length
         const newMembre = await membres.create(
             { 
                 id:id,
                 pseudo:pseudo,
-                passWord:deggat,
+                passWord:hash,
                 departementDOrigine:departementDOrigine,
                 firstName:firstName,
                 lastName:lastName,
@@ -77,11 +75,13 @@ module.exports.add = async (req, res) => {
                 confidentiel:confidentiel,
                 chef:chef,
                 IValidation:false,
+                rS:{userX:'',userFa:'',userIn:'',userLi:''},
                 // EValidation:{code:codeInMail,confirmation:false},
 
              })
         // confirmEmail(email)
         res.status(201).json({ newMembreId: newMembre._id })
+        }})
     } catch (err) {
         res.status(404).json({ erreur: err })
     }
@@ -218,6 +218,21 @@ module.exports.majRs=async (req,res)=>{
             )
         }
         res.status(200).send({'membrePseudo':membrePseudo})
+    } catch (err) {
+        return res.status(400).send(err)
+    }
+}
+module.exports.addIIRemoveImage=async (req,res)=>{
+    const {pseudo,images}=req.body
+    try {
+        await membres.updateOne(
+            {pseudo:pseudo},
+            {
+                addedImages:images
+            },
+            {new:true, upsert:true, setDefaultsOnInsert:true,validateModifiedOnly:true}
+        )
+        res.status(200).send({'retour':'✔ Image bien ajoutée à votre galérie personnelle ❕'})
     } catch (err) {
         return res.status(400).send(err)
     }

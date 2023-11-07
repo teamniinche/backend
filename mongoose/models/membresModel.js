@@ -29,6 +29,7 @@ const membresSchema = new mongoose.Schema(
             imgPublic1: { type: String },
             imgPublic2: { type: String }
         },
+        addedImages:{type:String,default:[]},
         apropos: { type: String },
         confidentiel: { type: String },
         statu: { type: String },
