@@ -70,6 +70,7 @@ module.exports.add = async (req, res) => {
                 email:email,
                 dateAnniversaire:dateAnniversaire,
                 galeriePrive: galeriePrive,
+                addedImages:[],
                 tngroupe:tngroupe,
                 apropos:apropos,
                 confidentiel:confidentiel,
