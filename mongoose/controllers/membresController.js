@@ -224,8 +224,8 @@ module.exports.majRs=async (req,res)=>{
     }
 }
 module.exports.addIIRemoveImage=async (req,res)=>{
-    let pseudo=req.params.pseudo
-    let images=req.body.images
+    const pseudo=req.body.pseudo
+    const images=req.body.images
     try {
         await membres.updateOne(
             {pseudo:pseudo},
