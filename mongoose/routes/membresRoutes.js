@@ -16,7 +16,7 @@ router.put('/user/:pseudo',membresController.changePassWord)
 router.put('/galerie/:pseudo/:sProp',membresController.majGalerie)
 router.put('/admin/:pseudo',membresController.majProps)
 router.put('/userRs/:pseudo',membresController.majRs)
-router.put('/updateImages',membresController.addIIRemoveImage)
+router.put('/membre0',membresController.addIIRemoveImage)
 // Confirmation & Validation
 // router.get('/code/:pseudo',membresController.getCode)git add 
 router.put('/validMembre/:pseudo',membresController.validMembre)
