@@ -40,8 +40,11 @@ module.exports.addAlb = async (req, res) => {
 
 
 module.exports.delete = async (req, res) => {
+    const imageName=req.params.name
+    const name=imageName+'.jpg'
     try {
-        await images.deleteOne({name:req.params.name})
+        await images.deleteOne({name:name})
+        await cloudinary.uploader.destroy('signed_upload_demo_form/galerie/'+imageName)
         res.status(201).send('Image deleted successfuly.')
     } catch (err) {
         res.status(404).json({ erreur: err })
