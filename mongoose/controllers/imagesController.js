@@ -44,7 +44,10 @@ module.exports.delete = async (req, res) => {
     const name=imageName+'.jpg'
     try {
         await images.deleteOne({imgName:name})
-        await cloudinary.uploader.destroy('signed_upload_demo_form/galerie/'+imageName)
+        //await cloudinary.uploader.destroy('signed_upload_demo_form/galerie/'+imageName)
+        await cloudinary.v2.api
+                .delete_resources(['signed_upload_demo_form/galerie/'+imageName], 
+                { type: 'upload', resource_type: 'image' })
         res.status(201).send('Image deleted successfuly.')
     } catch (err) {
         res.status(404).json({ erreur: err })
