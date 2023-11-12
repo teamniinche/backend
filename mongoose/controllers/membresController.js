@@ -70,6 +70,7 @@ module.exports.add = async (req, res) => {
                 email:email,
                 dateAnniversaire:dateAnniversaire,
                 galeriePrive: galeriePrive,
+                addedImages:[],
                 tngroupe:tngroupe,
                 apropos:apropos,
                 confidentiel:confidentiel,
@@ -223,12 +224,13 @@ module.exports.majRs=async (req,res)=>{
     }
 }
 module.exports.addIIRemoveImage=async (req,res)=>{
-    const {pseudo,images}=req.body
+    const pseudo=req.body.pseudo
+    const images=req.body.images
     try {
         await membres.updateOne(
             {pseudo:pseudo},
             {
-                addedImages:images
+                addedImages:images 
             },
             {new:true, upsert:true, setDefaultsOnInsert:true,validateModifiedOnly:true}
         )
