@@ -1,10 +1,12 @@
 const membres = require('../models/membresModel')
+
 const nodeMailer=require('nodemailer')
 const bcrypt=require('bcrypt')
+// const { emailValidator } = require('../../../TN-Frontent/src/regExpressions');
 const ObjectID=require('mongoose').Types.ObjectId
 
 function getRandomForEmailConfirm(min, max) {
-    return Math.random() * (max - min) + min;
+    return Math.round(Math.random() * (max - min) + min);
   }
 
 module.exports.getAll = async (req, res) => {
@@ -44,7 +46,7 @@ module.exports.add = async (req, res) => {
     const galeriePrive={imgPublic:'',imgPrive: '',imgPublic1:'',imgPublic2:''}
     const chef="non"
     
-    // const codeInMail=getRandomForEmailConfirm(9001,10000)
+    const codeInMail=Math.round(getRandomForEmailConfirm(9001,10000))
     try {
         const odiem=bcrypt.genSaltSync(10)
         bcrypt.hash(passWord,odiem, async function(err,hash){
@@ -77,11 +79,12 @@ module.exports.add = async (req, res) => {
                 chef:chef,
                 IValidation:false,
                 rS:{userX:'',userFa:'',userIn:'',userLi:''},
-                // EValidation:{code:codeInMail,confirmation:false},
+                EValidation:{code:codeInMail,confirmation:false},
 
              })
         // confirmEmail(email)
-        res.status(201).json({ newMembreId: newMembre._id })
+        res.status(201).json({ newMembreId: newMembre._id,pseudo:newMembre.pseudo,codeConfirmation:codeInMail,email:email })
+        // res.redirect('/mailjet/sendConfirmationMail/'+codeInMail)
         }})
     } catch (err) {
         res.status(404).json({ erreur: err })
@@ -316,32 +319,93 @@ module.exports.searchIfMembre= async (req, res)=>{
       res.status(200).send(bool)
       };
 
-const confirmEmail=async (email)=>{
+module.exports.confirmEmail=async (req,res)=>{
+    const {pseudo,email,code}=req.body
+    // const code=Math.round(getRandomForEmailConfirm(9001,10000))
+    // const code=req.body.code
+    
+    //secret et key à mettre dans .env du serveur
     const transporteur=nodeMailer.createTransport(
         {
-            service: 'gmail',
+            service:"Gmail",
+            host: "smtp.gmail.com",
+            port: 465,
+            secure: true,
             auth: {
               user: 'ndourm9@gmail.com',
-              pass: '1m7A5m9A',
+              pass: process.env.NODEMAILER_AUTH_PASS,
             },   
         }
     );
-
+    const date=new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')      // replace T with a space
+                     
     const mailOptions={
-            from:'ndourm9@gmail.com',
-            to:email,
-            subject:'Test nodemailer',
-            text:'My first NODEMAILER mail from to ndayfatou@gmail.com'
+            from: '"Team Niintche  🇸🇳 " teamniintche@gmail.com', // sender address
+            to: email, // list of receivers
+            subject: code +" est le code de vérification de votre adresse e-mail ✔", // Subject line
+            text: "LES VOLONTAIRES DE LA CITOYENNETE ACTIVE 🇸🇳 ", // plain text body
+            html: "<b>Bonjour "+pseudo+",<br/><br/>Ce code est requis pour valider votre inscription à une plateforme digitale de la teamniintche.<br/><br/>Code de vérification : <h1>" +code+"</h1><br/><br/>Cordialement, __________  "+date+"</b>", // html body
         }
 
     transporteur.sendMail(mailOptions,
             (error,info)=>{
-                if(error){
-                    console.loge=('Mail sending succed❤🥰')
+                if(!error){
+                    res.status(200).json({CODE :code})
                 }else{
-                    console.log({'Mail sending failed!':error})
+                    res.status(404).json({'Mail sending failed!':error})
                 }
             }
     )
 
 }
+
+// function membreFinder=async (email)=>{
+
+module.exports.codeIsValid=async (req,res)=>{
+    const email=req.body.email;
+    const code=parseInt(req.body.code);
+   try{ 
+        const Membres = await membres.find();
+        const membre=Membres.filter(membre=>membre.email===email);
+        const validCode=membre[0].EValidation.code;
+        if(membre && validCode && code===validCode){
+            majValidation(email)
+            res.status(200).send({isValid:true})
+        }else{
+            res.status(440).send({isValid:false})
+        }
+    }catch(err){console.log('err:'+err)}
+
+}
+
+const majValidation=async (email)=>{
+    try {
+        await membres.updateOne(
+            {email:email},//{_id:id},
+            {
+                'EValidation.confirmation':true,
+            },
+            {new:true, upsert:true, setDefaultsOnInsert:true,validateModifiedOnly:true}
+        )
+        // res.status(204).send({isValid:true})
+    } catch (err) {
+        return console.log("Une erreur s'est produite lors de la mise à jour  de la validation: "+err)
+    }
+}
+
+// ******************************** VERIFICATION D'E-MAIL **************************
+
+module.exports.verifyEmail=async (req,res)=>{
+    const email=req.body.email
+    const email_verifier_url="https://api.hunter.io/v2/email-verifier?email="+{email}+"&api_key="+process.env.HUNTER_API_KEY
+    try {
+	fetch(email_verifier_url
+        , {
+        method: 'GET',
+        headers: {}
+      })
+    .then(response =>response.json())
+	.then(data =>res.status(200).send(data))
+} catch (error) {
+	res.status(400).json(error);
+}}

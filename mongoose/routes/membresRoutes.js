@@ -1,5 +1,7 @@
 const router=require('express').Router();
 const membresController=require('../controllers/membresController')
+// const mailjetController=require('../controllers/mailjetController')
+
 
 router.get('/allmembres',membresController.getAll)
 router.get('/allmembres/pseudos/:term',membresController.searchIfMembre)
@@ -8,6 +10,11 @@ router.get('/:pseudo',membresController.getOne)
 router.post('/login',membresController.login)
 router.post('/membre/isSame',membresController.isSame)
 router.post('/newMembre',membresController.add)
+
+// ****************  NODEMAILER  **************************
+router.post('/sendConfirmationMail',membresController.confirmEmail)
+router.post('/code_is_valid',membresController.codeIsValid)
+
 // Deletion
 router.delete(':id',membresController.delete)
 // Updating membre
