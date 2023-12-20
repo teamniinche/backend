@@ -320,7 +320,7 @@ module.exports.searchIfMembre= async (req, res)=>{
       };
 
 module.exports.confirmEmail=async (req,res)=>{
-    	const {pseudo,email,code}=req.body
+    	const {pseudo,email}=req.body
 	const Membres = await membres.find()
        	const code=Membres.filter(membre=>membre.email===email)[0].EValidation.code;
     
