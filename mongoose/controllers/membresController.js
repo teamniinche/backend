@@ -320,9 +320,12 @@ module.exports.searchIfMembre= async (req, res)=>{
       };
 
 module.exports.confirmEmail=async (req,res)=>{
-    const {pseudo,email,code}=req.body
-    // const code=Math.round(getRandomForEmailConfirm(9001,10000))
-    // const code=req.body.code
+    	const {pseudo,email,code}=req.body
+	const code = await membres
+                        .find()
+                        .filter(membre=>membre.email===email)[0]
+                        .EValidation
+                        .code;
     
     //secret et key à mettre dans .env du serveur
     const transporteur=nodeMailer.createTransport(
