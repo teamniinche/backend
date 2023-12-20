@@ -321,11 +321,8 @@ module.exports.searchIfMembre= async (req, res)=>{
 
 module.exports.confirmEmail=async (req,res)=>{
     	const {pseudo,email,code}=req.body
-	const code = await membres
-                        .find()
-                        .filter(membre=>membre.email===email)[0]
-                        .EValidation
-                        .code;
+	const Membres = await membres.find()
+       	const code=Membres.filter(membre=>membre.email===email)[0].EValidation.code;
     
     //secret et key à mettre dans .env du serveur
     const transporteur=nodeMailer.createTransport(
@@ -353,9 +350,9 @@ module.exports.confirmEmail=async (req,res)=>{
     transporteur.sendMail(mailOptions,
             (error,info)=>{
                 if(!error){
-                    res.status(200).json({CODE :code})
+                    res.status(200).send({CODE :"sent"})
                 }else{
-                    res.status(404).json({'Mail sending failed!':error})
+                    res.status(404).send({'Mail sending failed!':error})
                 }
             }
     )
