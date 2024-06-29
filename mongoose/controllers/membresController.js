@@ -332,7 +332,7 @@ module.exports.confirmEmail=async (req,res)=>{
             port: 465,
             secure: true,
             auth: {
-              user: 'teamniintche@gmail.com',
+              user: 'ndourm9@gmail.com',
               pass: process.env.NODEMAILER_AUTH_PASS,
             },   
         }
